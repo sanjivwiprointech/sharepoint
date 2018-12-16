@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>testing</title>
+	<style type='text/css'>
+       
+            
+          .main{
+
+          	border: 2px solid green;
+          	background-color:yellow;
+          	width: 700px;
+
+          } 
+           
+		</style>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<strong>
+	<script type="text/javascript">
+    //
+    function AddNewItem1()
+    {
+    var FirstName,
+    LastName,
+    CompanyName,
+    DateOfBirth,
+    Country,
+    EmailId,
+    PhoneNo,
+    Department,
+    DateofJoin,
+    Address,
+    Gender,
+    Hobbies;
+    FirstName = $("#fname").val();
+    LastName = $("#lname").val();
+    CompanyName = $("#cname").val();
+    DateOfBirth = $("#ddate").val();
+    Country = $("#ccountry").val();
+    EmailId = $("#eemail").val();
+    PhoneNo = $("#pphone").val();
+    Department = $("#ddepartment").val();
+    DateofJoin = $("#ddateofjoin").val();
+    Address = $("#aaddress").val();
+    Gender = $("input[type='radio']:checked").val();
+    Hobbies = $("input[type='checkbox']:checked").val();
+    var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('Gfrm')/items";
+     var data = JSON.stringify(
+     {
+     "__metadata":   
+        {  
+            "type": "SP.Data.GfrmListItem"  
+        },  
+        "FirstName": FirstName,
+    	"LastName": LastName,
+    	"CompanyName": CompanyName,
+   		"DateOfBirth":DateOfBirth,
+    	"Country": Country,
+    	"EmailId": EmailId,
+    	"PhoneNo": PhoneNo,
+    	"Department":Department,
+    	"DateofJoin":DateofJoin,
+    	"Address":Address,
+    	"Gender":Gender,
+    	"Hobbies":Hobbies,
+     })
+     $.ajax  
+    ({  
+        url: url,  
+        type: "POST",  
+        data: data,  
+        headers: {  
+            "Accept": "application/json;odata=verbose",  
+            "Content-Type": "application/json;odata=verbose",  
+            "X-RequestDigest": $("#__REQUESTDIGEST").val()
+              
+        },  
+        success: function(data)   
+      {  
+            alert("New list item has been created successfully.");  
+        },  
+        error: function(data)  
+        {  
+            alert("Failed to create list item.");  
+        }  
+    });  
+    location.reload();
+    }
+	//	
+function GetListItems()   
+{  
+    var row = "";  
+    var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('OWN')/items";  
+    $.ajax  
+    ({  
+        url: url,  
+        type: "GET",  
+        headers:  
+        {  
+            "Accept": "application/json;odata=verbose",  
+            "Content-Type": "application/json;odata=verbose",  
+        },  
+        success: function(data)   
+        {  
+            var result = data.d.results;  
+            $.each(result, function(key, item)  
+            {  
+                var l = item.Title;  
+                row = row + '<tr style="background-color:red"><td>' + item.Id + '</td><td>' + item.Title + '</td><td>' + item.Description +'</td><td>' + item.Quantity + '</td><td>' + item.Price +'</td><td>' + item.City + '</td> <td>' + item.Availability + '</td></tr>';  
+            })  
+  
+            $("#GetItems>tbody").html(row);  
+            $("#GetItems").show();  
+        },  
+        error: function(data)   
+        {  
+            alert("Failed to get list items.");  
+        }  
+    });  
+    //location.reload();
+
+  
+}  
+
+function UpdateListItem()  
+{  
+    //var Id, Title, Price;  
+    //Id = $("#ItemId").val();  
+    Title = $("#NewTitle").val();  
+    Price = $("#NewPrice").val();  
+  
+    var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('Gfrm')/items(" + Id + ")";  
+    var data = JSON.stringify  
+    ({  
+        "__metadata":   
+        {  
+            "type": "SP.Data.GfrmListItem"  
+        },  
+        "Title": Title,  
+        "Price": Price,  
+    })  
+    $.ajax  
+    ({  
+        url: url,  
+        type: "POST",  
+        data: data,  
+        headers: {  
+            "accept": "application/json;odata=verbose",  
+            "content-type": "application/json;odata=verbose",  
+            "X-RequestDigest": $("#__REQUESTDIGEST").val(),  
+            "IF-MATCH": "*",  
+            "X-HTTP-Method": "MERGE"  
+        },  
+        success: function(data)  
+        {  
+            alert("List Item has been updated successfully")  
+        },  
+        error: function(data)   
+        {  
+            alert("Failed to update list items.");  
+        }  
+    }); 
+    location.reload();
+ 
+}  
+
+function dELETE(){
+//var Id = $("#ItemId").val(); 
+  
+var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('Gfrm')/items(" + Id + ")";  
+    $.ajax  
+    ({  
+        url: url,  
+        method: "POST",  
+        headers:  
+        {  
+            "accept": "application/json;odata=verbose",  
+            "content-type": "application/json;odata=verbose",  
+            "X-RequestDigest": $("#__REQUESTDIGEST").val(),  
+            "IF-MATCH": "*",  
+            "X-HTTP-Method": "DELETE"  
+        },  
+        success: function(data)   
+        {  
+            alert("List Item has been deleted successfully.")  
+        },  
+        error: function(data)  
+        {  
+            alert("Failed to delete the list item");  
+        }  
+    });  
+   location.reload();
+
+}
+
+
+
+</script>
+
+	</strong>
+//
+<center>
+		<div class="main">
+		<table>
+			<tr><h1> Employee Form</h1></tr>
+			<tr>
+				<td>
+					First Name: 
+				</td>
+				<td>
+					<input type="text" placeholder="First Name" name="" id="fname">
+				</td>
+				<td>
+					Last Name: 
+				</td>
+				<td><input type="text" placeholder="Last Name" name="" id="lname"></td>
+				<td> 
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+					Company Name: 
+				</td>
+				<td> <input type="text" placeholder="Company Name" name="" id="cname"></td>
+				<td>
+					Date Of Birth: 
+				</td>
+				<td><input type="date" name="bday" id="ddate"></td>
+			</tr>
+			<tr>
+				<td> Country:</td> 
+				<td><select id="ccountry"> <option>India</option>
+					<option>Afganistan</option>
+					<option>France</option>
+					<option>Russia</option>
+					<option>America</option>
+				</td>
+					</tr>
+					<tr>
+						<td>
+							Email Id: 
+						</td>
+						<td><input type="text" placeholder = "Email name="" id="eemail"></td>
+						<td>
+							Phone No.
+						</td>
+						<td>
+							<input type="Phone" name="" id="pphone">
+						</td>
+					</tr>
+					<tr> 
+						<td>
+							Department:
+						</td>
+						<td><select id="ddepartment"> <option>Hr</option>
+					<option>Development</option>
+					<option>testing</option>
+					<option>Delivery</option></td>
+					<td>
+						Date of Join:
+					</td>
+					<td><input type="date" name="" id="ddateofjoin">
+						</td>
+					
+				
+					</tr>
+					<tr>
+						<td>&#42; Address:</td>
+                <td colspan="6"><textarea rows="6" id="aaddress" cols="80"></textarea></td><
+
+                          </tr>
+						<td>
+						  Gender: </td>
+						  <td> <input type="radio" name="gender" value="Male" checked> Male
+                            <input type="radio" name="gender" value="Female"> Female
+                           </td>
+					</tr>
+					<div id="hhobbies">
+					<tr>
+						<td> Hobbies</td>
+						<td>    <input type="checkbox" name="Hobbies" value="Reading" checked > Reading <br>
+								<input type="checkbox" name="Hobbies" value="Playing Cricket" checked> Playing Cricket<br>
+								<input type="checkbox" name="Hobbies" value="Coloring" checked> Coloring<br>
+								<input type="checkbox" name="Hobbies" value="Cooking" checked> Cooking<br>
+						</td>
+					</tr>
+					</div>
+					<td>
+						<input type="submit" value="Submit" onclick="AddNewItem1()">
+						<input type="Reset" value="Reset">
+					</td>
+		</table>
+</div>
+</center>
+//     
+</body>
+</html>
